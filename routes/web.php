@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
-
+use App\Http\Controllers\AuthController;
 Route::get('/tasks', [TaskController::class, 'index']);
 Route::get('/', function () {
     return view('welcome');
@@ -16,3 +16,6 @@ Route::post('/tasks', [TaskController::class, 'store'])
     ->name('tasks.update');
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])
     ->name('tasks.destroy');
+    Route::get('/login', [AuthController::class, 'showLogin']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
