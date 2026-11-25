@@ -7,7 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use App\Models\Task;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -46,4 +47,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // Tasks assigned to this employee
+public function assignedTasks()
+{
+    return $this->hasMany(Task::class, 'assigned_to');
+}
+
+// Tasks created by this manager
+public function createdTasks()
+{
+    return $this->hasMany(Task::class, 'created_by');
+}
 }

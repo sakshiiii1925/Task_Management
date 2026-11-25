@@ -8,13 +8,13 @@
    
 @extends('layouts.app')
 
-@section('title', 'My Tasks')
+@section('title', 'All Tasks')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="page-title">My Tasks</h2>
+        <h2 class="page-title">All Tasks</h2>
         <p class="text-muted">Manage and track all your tasks.</p>
     </div>
 
