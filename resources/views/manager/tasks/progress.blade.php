@@ -20,6 +20,7 @@
                         <th>Assigned Employee</th>
                         <th>Status</th>
                         <th>Due Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -55,12 +56,38 @@
 </td>
 
                             <td>{{ $task->due_date ?? 'Not specified' }}</td>
+                            <td>
+    <div class="d-flex gap-2">
+
+        <!-- Edit Button -->
+        <a href="{{ url('/manager/tasks/' . $task->id . '/edit') }}"
+           class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-pencil-square"></i> Edit
+        </a>
+
+        <!-- Delete Button -->
+        <form action="{{ url('/manager/tasks/' . $task->id) }}"
+              method="POST"
+              class="delete-task-form">
+
+            @csrf
+            @method('DELETE')
+
+            <button type="button"
+                    class="btn btn-sm btn-danger delete-task-btn">
+                <i class="bi bi-trash"></i> Delete
+            </button>
+
+        </form>
+
+    </div>
+</td>
                         </tr>
 
                     @empty
 
                         <tr>
-                            <td colspan="5" class="text-center">
+                            <td colspan="6" class="text-center">
                                 No tasks found.
                             </td>
                         </tr>

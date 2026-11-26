@@ -37,11 +37,22 @@ public function store(Request $request)
     return redirect('/manager/employees')
         ->with('success', 'Employee created successfully!');
 }
-public function index()
+public function index(Request $request)
 {
-    $employees = User::where('role', 'employee')->get();
+    $search = $request->search;
 
-    return view('manager.employees.index', compact('employees'));
+    $employees = User::where('role', 'employee')
+        ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        })
+        ->latest()
+        ->paginate(10)
+        ->withQueryString();
+
+    return view('manager.employees.index', compact('employees', 'search'));
 }
 public function updateTaskStatus(Request $request, $id)
 {
@@ -58,5 +69,40 @@ public function updateTaskStatus(Request $request, $id)
 
     return redirect('/employee/dashboard')
         ->with('success', 'Task status updated successfully!');
+}
+public function edit($id)
+{
+    $employee = User::where('role', 'employee')
+        ->findOrFail($id);
+
+    return view('manager.employees.edit', compact('employee'));
+}
+public function update(Request $request, $id)
+{
+    $employee = User::where('role', 'employee')
+        ->findOrFail($id);
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $id,
+    ]);
+
+    $employee->update([
+        'name' => $request->name,
+        'email' => $request->email,
+    ]);
+
+    return redirect('/manager/employees')
+        ->with('success', 'Employee updated successfully!');
+}
+public function destroy($id)
+{
+    $employee = User::where('role', 'employee')
+        ->findOrFail($id);
+
+    $employee->delete();
+
+    return redirect('/manager/employees')
+        ->with('success', 'Employee deleted successfully!');
 }
 }

@@ -5,6 +5,8 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ForgotPasswordController;
 Route::get('/tasks', [TaskController::class, 'index']);
 Route::get('/', function () {
     return view('welcome');
@@ -53,3 +55,49 @@ Route::post(
     [EmployeeController::class, 'updateTaskStatus']
 );
 Route::get('/manager/tasks/progress', [ManagerController::class, 'taskProgress']);
+// Edit Task
+Route::get('/manager/tasks/{id}/edit', [ManagerController::class, 'editTask']);
+
+// Update Task
+Route::put('/manager/tasks/{id}', [ManagerController::class, 'updateTask']);
+
+// Delete Task
+Route::delete('/manager/tasks/{id}', [ManagerController::class, 'deleteTask']);
+Route::get('/employees/{id}/edit', [EmployeeController::class, 'edit'])
+    ->name('manager.employees.edit');
+
+Route::put('/employees/{id}', [EmployeeController::class, 'update'])
+    ->name('manager.employees.update');
+
+Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])
+    ->name('manager.employees.destroy');
+    Route::get('/employees/{id}/edit', [EmployeeController::class, 'edit'])
+    ->name('manager.employees.edit');
+
+Route::put('/employees/{id}', [EmployeeController::class, 'update'])
+    ->name('manager.employees.update');
+
+Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])
+    ->name('manager.employees.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+    ->name('profile.edit');
+
+Route::put('/profile', [ProfileController::class, 'update'])
+    ->name('profile.update');
+    // Forgot Password
+Route::get('/forgot-password',
+    [ForgotPasswordController::class, 'showLinkRequestForm']
+)->name('password.request');
+
+Route::post('/forgot-password',
+    [ForgotPasswordController::class, 'sendResetLinkEmail']
+)->name('password.email');
+
+// Reset Password
+Route::get('/reset-password/{token}',
+    [ForgotPasswordController::class, 'showResetForm']
+)->name('password.reset');
+
+Route::post('/reset-password',
+    [ForgotPasswordController::class, 'reset']
+)->name('password.update');

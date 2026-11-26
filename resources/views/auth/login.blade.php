@@ -43,19 +43,40 @@
                     >
                 </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">
-                        Password
-                    </label>
+               <div class="mb-4">
+    <label class="form-label fw-semibold">
+        Password
+    </label>
 
-                    <input
-                        type="password"
-                        name="password"
-                        class="form-control"
-                        placeholder="Enter your password"
-                        required
-                    >
-                </div>
+    <div class="input-group">
+        <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+            placeholder="Enter your password"
+            required
+        >
+
+        <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="togglePassword"
+            aria-label="Show password"
+        >
+            <i class="bi bi-eye" id="eyeIcon"></i>
+        </button>
+    </div>
+</div>
+<div class="text-end mb-3">
+    <a href="{{ url('/forgot-password') }}"
+       class="text-decoration-none"
+       style="color: #e11d48; font-weight: 600;">
+
+        Forgot Password?
+
+    </a>
+</div>
 
                 <button type="submit"
                         class="btn btn-orange w-100">
@@ -69,5 +90,24 @@
     </div>
 
 </div>
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
 
+        const password = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (password.type === 'password') {
+            password.type = 'text';
+            eyeIcon.classList.remove('bi-eye');
+            eyeIcon.classList.add('bi-eye-slash');
+            this.setAttribute('aria-label', 'Hide password');
+        } else {
+            password.type = 'password';
+            eyeIcon.classList.remove('bi-eye-slash');
+            eyeIcon.classList.add('bi-eye');
+            this.setAttribute('aria-label', 'Show password');
+        }
+
+    });
+</script>
 @endsection

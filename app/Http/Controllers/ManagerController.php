@@ -51,4 +51,54 @@ public function taskProgress()
 
     return view('manager.tasks.progress', compact('tasks'));
 }
+// Show Edit Task Form
+public function editTask($id)
+{
+    $task = Task::findOrFail($id);
+
+    $employees = User::where('role', 'employee')->get();
+
+    return view('manager.tasks.edit', compact('task', 'employees'));
+}
+
+
+// Update Task
+public function updateTask(Request $request, $id)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        'status' => 'required|in:Pending,In Progress,Completed',
+        'due_date' => 'nullable|date',
+        'assigned_to' => 'required|exists:users,id',
+    ]);
+
+    $employee = User::where('role', 'employee')
+        ->findOrFail($validated['assigned_to']);
+
+    $task = Task::findOrFail($id);
+
+    $task->update([
+        'title' => $validated['title'],
+        'description' => $validated['description'],
+        'status' => $validated['status'],
+        'due_date' => $validated['due_date'],
+        'assigned_to' => $employee->id,
+    ]);
+
+    return redirect('/manager/tasks/progress')
+        ->with('success', 'Task updated successfully!');
+}
+
+
+// Delete Task
+public function deleteTask($id)
+{
+    $task = Task::findOrFail($id);
+
+    $task->delete();
+
+    return redirect('/manager/tasks/progress')
+        ->with('success', 'Task deleted successfully!');
+}
 }

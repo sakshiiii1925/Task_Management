@@ -44,14 +44,26 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        class="form-control"
-                        placeholder="Create employee password"
-                        required>
-                </div>
+    <label class="form-label">Password</label>
+
+    <div class="input-group">
+        <input
+            type="password"
+            name="password"
+            id="employeePassword"
+            class="form-control"
+            placeholder="Create employee password"
+            required>
+
+        <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="toggleEmployeePassword"
+            aria-label="Show password">
+            <i class="bi bi-eye" id="employeeEyeIcon"></i>
+        </button>
+    </div>
+</div>
 
                 <button type="submit" class="btn btn-orange w-100">
                     Add Employee
@@ -68,5 +80,22 @@
 
     </div>
 </div>
+<script>
+    document.getElementById('toggleEmployeePassword').addEventListener('click', function () {
 
+        const password = document.getElementById('employeePassword');
+        const eyeIcon = document.getElementById('employeeEyeIcon');
+
+        if (password.type === 'password') {
+            password.type = 'text';
+            eyeIcon.classList.replace('bi-eye', 'bi-eye-slash');
+            this.setAttribute('aria-label', 'Hide password');
+        } else {
+            password.type = 'password';
+            eyeIcon.classList.replace('bi-eye-slash', 'bi-eye');
+            this.setAttribute('aria-label', 'Show password');
+        }
+
+    });
+</script>
 @endsection

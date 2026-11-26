@@ -339,6 +339,22 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     color: #ffffff;
     transform: scale(1.08) rotate(-3deg);
 }
+.logout-popup {
+    border-radius: 20px !important;
+    padding: 25px !important;
+    box-shadow: 0 15px 45px rgba(39, 39, 42, 0.18);
+}
+
+.logout-title {
+    font-weight: 700 !important;
+}
+
+.logout-confirm,
+.logout-cancel {
+    border-radius: 8px !important;
+    padding: 10px 22px !important;
+    font-weight: 600 !important;
+}
 </style>
     
 </head>
@@ -404,16 +420,22 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
                             </li>
 
                         @endif
+                        <li class="nav-item">
+    <a class="nav-link" href="{{ route('profile.edit') }}">
+        <i class="bi bi-person-circle me-1"></i>
+        My Profile
+    </a>
+</li>
+<li class="nav-item ms-lg-3">
+    <form action="{{ url('/logout') }}" method="POST" id="logoutForm">
+        @csrf
 
-                        <li class="nav-item ms-lg-3">
-                            <form action="{{ url('/logout') }}" method="POST">
-                                @csrf
-
-                                <button type="submit" class="btn btn-orange">
-                                    Logout
-                                </button>
-                            </form>
-                        </li>
+        <button type="button" class="btn btn-orange" id="logoutButton">
+            <i class="bi bi-box-arrow-right me-1"></i>
+            Logout
+        </button>
+    </form>
+</li>
 
                     @else
 
@@ -438,6 +460,76 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('logoutButton')?.addEventListener('click', function () {
 
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you really want to logout from your account?',
+            icon: 'warning',
+
+            showCancelButton: true,
+
+            confirmButtonText: 'Yes, Logout',
+            cancelButtonText: 'Cancel',
+
+            confirmButtonColor: '#e11d48',
+            cancelButtonColor: '#27272a',
+
+            background: '#ffffff',
+            color: '#27272a',
+
+            reverseButtons: true,
+            focusCancel: true,
+
+            customClass: {
+                popup: 'logout-popup',
+                title: 'logout-title',
+                confirmButton: 'logout-confirm',
+                cancelButton: 'logout-cancel'
+            }
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                document.getElementById('logoutForm').submit();
+            }
+
+        });
+
+    });
+</script>
+<script>
+document.querySelectorAll('.delete-task-btn').forEach(button => {
+
+    button.addEventListener('click', function () {
+
+        const form = this.closest('.delete-task-form');
+
+        Swal.fire({
+            title: 'Delete Task?',
+            text: 'This task will be permanently deleted.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#e11d48',
+            cancelButtonColor: '#27272a',
+            background: '#ffffff',
+            color: '#27272a',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
+</script>
 </body>
 </html>
