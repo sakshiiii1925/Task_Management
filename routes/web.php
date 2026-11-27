@@ -7,6 +7,9 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\EmployeeReportController;
+use App\Http\Controllers\AllEmployeeReportController;
+
 Route::get('/tasks', [TaskController::class, 'index']);
 Route::get('/', function () {
     return view('welcome');
@@ -101,3 +104,21 @@ Route::get('/reset-password/{token}',
 Route::post('/reset-password',
     [ForgotPasswordController::class, 'reset']
 )->name('password.update');
+Route::middleware(['auth', 'role:manager'])->group(function () {
+    // Employee Monthly Performance Report
+Route::get('/manager/reports/employee',
+    [EmployeeReportController::class, 'index']
+)->name('manager.reports.employee');
+// Download Employee Monthly Report PDF
+Route::get('/manager/reports/employee/pdf',
+    [EmployeeReportController::class, 'downloadPdf']
+)->name('manager.reports.employee.pdf');
+// All Employees Monthly Report
+Route::get('/manager/reports/all-employees',
+    [AllEmployeeReportController::class, 'index']
+)->name('manager.reports.all-employees');
+// Download All Employees Monthly Report in Excel
+Route::get('/manager/reports/all-employees/excel',
+    [AllEmployeeReportController::class, 'downloadExcel']
+)->name('manager.reports.all-employees.excel');
+});

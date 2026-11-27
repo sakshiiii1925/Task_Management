@@ -9,9 +9,42 @@ use Illuminate\Support\Facades\Auth;
 class ManagerController extends Controller
 {
     public function dashboard()
-    {
-        return view('manager.dashboard');
-    }
+{
+    $totalEmployees = User::where('role', 'employee')->count();
+
+    $totalTasks = Task::count();
+
+    $completedTasks = Task::where('status', 'Completed')->count();
+
+    $pendingTasks = Task::where('status', 'Pending')->count();
+
+    $inProgressTasks = Task::where('status', 'In Progress')->count();
+
+    $completionPercentage = $totalTasks > 0
+        ? round(($completedTasks / $totalTasks) * 100, 2)
+        : 0;
+
+    // Employee-wise task performance
+    $employeePerformance = User::where('role', 'employee')
+        ->withCount([
+            'assignedTasks',
+            'assignedTasks as completed_tasks_count' => function ($query) {
+                $query->where('status', 'Completed');
+            },
+        ])
+        ->orderBy('name')
+        ->get();
+
+    return view('manager.dashboard', compact(
+        'totalEmployees',
+        'totalTasks',
+        'completedTasks',
+        'pendingTasks',
+        'inProgressTasks',
+        'completionPercentage',
+        'employeePerformance'
+    ));
+}
     public function createTask()
 {
     $employees = User::where('role', 'employee')->get();
@@ -45,11 +78,29 @@ public function storeTask(Request $request)
 }
 public function taskProgress()
 {
-    $tasks = Task::with('assignedEmployee')
-        ->latest()
-        ->get();
+    $tasks = Task::with('assignedEmployee')->get();
 
-    return view('manager.tasks.progress', compact('tasks'));
+    // Total tasks
+    $totalTasks = Task::count();
+
+    // Completed tasks
+    $completedTasks = Task::where('status', 'Completed')->count();
+
+    // In Progress tasks
+    $inProgressTasks = Task::where('status', 'In Progress')->count();
+
+    // Overdue tasks (past due date and not completed)
+    $dueTasks = Task::whereDate('due_date', '<', today())
+        ->where('status', '!=', 'Completed')
+        ->count();
+
+    return view('manager.tasks.progress', compact(
+        'tasks',
+        'totalTasks',
+        'completedTasks',
+        'inProgressTasks',
+        'dueTasks'
+    ));
 }
 // Show Edit Task Form
 public function editTask($id)

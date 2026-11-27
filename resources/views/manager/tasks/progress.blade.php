@@ -7,6 +7,93 @@
 
     <h2>Task Progress</h2>
 
+<!-- Task Summary Cards -->
+
+<div class="row g-3 mt-2 mb-4">
+
+    <!-- Total Tasks -->
+    <div class="col-md-6 col-lg-3">
+        <div class="task-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <p class="text-muted mb-1">Total Tasks</p>
+                    <h2 class="fw-bold mb-0">
+                        {{ $totalTasks }}
+                    </h2>
+                </div>
+
+                <div class="dashboard-icon">
+                    <i class="bi bi-clipboard-check"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Completed Tasks -->
+    <div class="col-md-6 col-lg-3">
+        <div class="task-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <p class="text-muted mb-1">Completed</p>
+                    <h2 class="fw-bold text-primary mb-0">
+                        {{ $completedTasks }}
+                    </h2>
+                </div>
+
+                <div class="dashboard-icon">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- In Progress Tasks -->
+    <div class="col-md-6 col-lg-3">
+        <div class="task-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <p class="text-muted mb-1">In Progress</p>
+                    <h2 class="fw-bold text-success mb-0">
+                        {{ $inProgressTasks }}
+                    </h2>
+                </div>
+
+                <div class="dashboard-icon">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Overdue Tasks -->
+    <div class="col-md-6 col-lg-3">
+        <div class="task-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <p class="text-muted mb-1">Overdue Tasks</p>
+                    <h2 class="fw-bold text-danger mb-0">
+                        {{ $dueTasks }}
+                    </h2>
+                </div>
+
+                <div class="dashboard-icon">
+                    <i class="bi bi-exclamation-circle"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
     <div class="card p-3 mt-3">
 
         <div class="table-responsive">
